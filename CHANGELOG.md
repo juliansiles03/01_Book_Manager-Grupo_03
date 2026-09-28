@@ -1,3 +1,12 @@
+## [Ejercicio 3]
+
+- Definición de las interfaces de repositorios.
+- Implementación del CRUD para las entidades identificadas por ID.
+- Implementación del CRUD de stock por libro.
+- Implementación del CRUD de cotizaciones por tipo y fecha.
+- Incorporación del listado completo de stock y cotizaciones.
+- Incorporación de type hints en parámetros y retornos.
+
 ## [Ejercicio 2]
 
 - Definición de las ocho entidades del sistema.
