@@ -1,3 +1,9 @@
+## [Ejercicio 7]
+
+- Creación de main.py como punto de entrada del sistema.
+- Integración de la precarga, la persistencia CSV y la consola.
+- Verificación de la ejecución con y sin precarga.
+
 ## [Ejercicio 6]
 
 - Implementación del menú principal de consola.
