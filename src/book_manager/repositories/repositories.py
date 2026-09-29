@@ -1,5 +1,7 @@
 import abc
+import csv
 import datetime
+from pathlib import Path
 from typing import Generic, List, Optional, TypeVar
 
 from book_manager.entities.entities import (
@@ -318,3 +320,248 @@ class RepositorioCotizacionDolar(
 
         del self._cotizaciones[clave]
         return True
+
+
+class AlmacenCSV:
+    """Carga y guarda los ocho repositorios en archivos CSV."""
+
+    def __init__(self, directorio: Path) -> None:
+        self._directorio: Path = directorio
+        self.generos = RepositorioGenero()
+        self.editoriales = RepositorioEditorial()
+        self.monedas = RepositorioMoneda()
+        self.tipos = RepositorioTipoCotizacion()
+        self.libros = RepositorioLibro()
+        self.precios = RepositorioPrecio()
+        self.stocks = RepositorioStock()
+        self.cotizaciones = RepositorioCotizacionDolar()
+        self._cargar()
+
+    def _leer(self, nombre: str) -> List[dict[str, str]]:
+        """Lee un CSV o devuelve una lista vacía si todavía no existe."""
+        ruta: Path = self._directorio / nombre
+        if not ruta.exists():
+            return []
+
+        with ruta.open(encoding="utf-8", newline="") as archivo:
+            return list(csv.DictReader(archivo))
+
+    def _escribir(
+        self,
+        nombre: str,
+        campos: List[str],
+        filas: List[List[str]],
+    ) -> None:
+        """Escribe un CSV y reemplaza su versión anterior."""
+        self._directorio.mkdir(parents=True, exist_ok=True)
+        ruta: Path = self._directorio / nombre
+        temporal: Path = ruta.with_suffix(".tmp")
+
+        with temporal.open(
+            "w", encoding="utf-8", newline=""
+        ) as archivo:
+            escritor = csv.writer(archivo)
+            escritor.writerow(campos)
+            escritor.writerows(filas)
+
+        temporal.replace(ruta)
+
+    def _obtener(
+        self,
+        repositorio: IRepositorio[T],
+        id: str,
+    ) -> T:
+        """Resuelve una referencia durante la carga."""
+        entidad: Optional[T] = repositorio.leer_por_id(int(id))
+        if entidad is None:
+            raise ValueError(
+                f"El CSV referencia una entidad inexistente: {id}."
+            )
+        return entidad
+
+    def _cargar(self) -> None:
+        """Reconstruye las entidades y sus relaciones en orden."""
+        for fila in self._leer("generos.csv"):
+            self.generos.crear(
+                Genero(int(fila["id"]), fila["nombre"])
+            )
+
+        for fila in self._leer("editoriales.csv"):
+            self.editoriales.crear(
+                Editorial(int(fila["id"]), fila["nombre"])
+            )
+
+        for fila in self._leer("monedas.csv"):
+            self.monedas.crear(
+                Moneda(
+                    int(fila["id"]),
+                    fila["nombre"],
+                    fila["codigo"],
+                )
+            )
+
+        for fila in self._leer("tipos_cotizacion.csv"):
+            self.tipos.crear(
+                TipoCotizacion(
+                    int(fila["id"]),
+                    fila["nombre"],
+                )
+            )
+
+        for fila in self._leer("libros.csv"):
+            self.libros.crear(
+                Libro(
+                    int(fila["id"]),
+                    fila["isbn"],
+                    fila["titulo"],
+                    fila["autor"],
+                    self._obtener(
+                        self.editoriales,
+                        fila["editorial_id"],
+                    ),
+                    self._obtener(
+                        self.generos,
+                        fila["genero_id"],
+                    ),
+                )
+            )
+
+        for fila in self._leer("precios.csv"):
+            self.precios.crear(
+                Precio(
+                    int(fila["id"]),
+                    self._obtener(
+                        self.libros,
+                        fila["libro_id"],
+                    ),
+                    self._obtener(
+                        self.monedas,
+                        fila["moneda_id"],
+                    ),
+                    float(fila["valor"]),
+                )
+            )
+
+        for fila in self._leer("stock.csv"):
+            self.stocks.crear(
+                Stock(
+                    self._obtener(
+                        self.libros,
+                        fila["libro_id"],
+                    ),
+                    int(fila["cantidad"]),
+                )
+            )
+
+        for fila in self._leer("cotizaciones.csv"):
+            self.cotizaciones.crear(
+                CotizacionDolar(
+                    self._obtener(
+                        self.tipos,
+                        fila["tipo_id"],
+                    ),
+                    datetime.date.fromisoformat(
+                        fila["fecha"]
+                    ),
+                    float(fila["compra"]),
+                    float(fila["venta"]),
+                )
+            )
+
+    def guardar(self) -> None:
+        """Guarda los datos actuales de todos los repositorios."""
+        self._escribir(
+            "generos.csv",
+            ["id", "nombre"],
+            [
+                [str(entidad.id), entidad.nombre]
+                for entidad in self.generos.leer_todos()
+            ],
+        )
+        self._escribir(
+            "editoriales.csv",
+            ["id", "nombre"],
+            [
+                [str(entidad.id), entidad.nombre]
+                for entidad in self.editoriales.leer_todos()
+            ],
+        )
+        self._escribir(
+            "monedas.csv",
+            ["id", "nombre", "codigo"],
+            [
+                [
+                    str(entidad.id),
+                    entidad.nombre,
+                    entidad.codigo,
+                ]
+                for entidad in self.monedas.leer_todos()
+            ],
+        )
+        self._escribir(
+            "tipos_cotizacion.csv",
+            ["id", "nombre"],
+            [
+                [str(entidad.id), entidad.nombre]
+                for entidad in self.tipos.leer_todos()
+            ],
+        )
+        self._escribir(
+            "libros.csv",
+            [
+                "id",
+                "isbn",
+                "titulo",
+                "autor",
+                "editorial_id",
+                "genero_id",
+            ],
+            [
+                [
+                    str(entidad.id),
+                    entidad.isbn,
+                    entidad.titulo,
+                    entidad.autor,
+                    str(entidad.editorial.id),
+                    str(entidad.genero.id),
+                ]
+                for entidad in self.libros.leer_todos()
+            ],
+        )
+        self._escribir(
+            "precios.csv",
+            ["id", "libro_id", "moneda_id", "valor"],
+            [
+                [
+                    str(entidad.id),
+                    str(entidad.libro.id),
+                    str(entidad.moneda.id),
+                    str(entidad.valor),
+                ]
+                for entidad in self.precios.leer_todos()
+            ],
+        )
+        self._escribir(
+            "stock.csv",
+            ["libro_id", "cantidad"],
+            [
+                [
+                    str(entidad.libro_id),
+                    str(entidad.cantidad),
+                ]
+                for entidad in self.stocks.leer_todos()
+            ],
+        )
+        self._escribir(
+            "cotizaciones.csv",
+            ["tipo_id", "fecha", "compra", "venta"],
+            [
+                [
+                    str(entidad.tipo_id),
+                    entidad.fecha.isoformat(),
+                    str(entidad.compra),
+                    str(entidad.venta),
+                ]
+                for entidad in self.cotizaciones.leer_todos()
+            ],
+        )
