@@ -1,3 +1,11 @@
+## [Ejercicio 6]
+
+- Implementación del menú principal de consola.
+- Incorporación de listados para las ocho entidades.
+- Incorporación de alta, modificación y baja para cada modelo.
+- Conexión de los menús con los servicios y sus validaciones.
+- Presentación de mensajes para operaciones correctas y errores de datos.
+
 ## [Ejercicio 5]
 
 - Implementación de la precarga en preload_data.py.
