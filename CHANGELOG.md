@@ -1,3 +1,12 @@
+## [Ejercicio 4]
+
+- Implementación de servicios para las ocho entidades.
+- Validación de identificadores, textos, importes y cantidades.
+- Control de duplicados y de relaciones con entidades registradas.
+- Protección del borrado de registros utilizados por otras entidades.
+- Guardado en CSV después de las operaciones de modificación.
+- Comprobación del CRUD y de la recuperación de datos desde archivos.
+
 ## [Ejercicio 3]
 
 - Definición de las interfaces de repositorios.
