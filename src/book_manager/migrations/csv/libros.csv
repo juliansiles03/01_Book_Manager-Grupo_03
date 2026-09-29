@@ -1,0 +1,11 @@
+id,isbn,titulo,autor,editorial_id,genero_id
+1,9780000000019,La casa del viento,Autor de ejemplo 1,1,1
+2,9780000000026,Ideas para pensar,Autor de ejemplo 2,2,2
+3,9780000000033,Viaje al bosque,Autor de ejemplo 3,3,3
+4,9780000000040,El planeta distante,Autor de ejemplo 4,4,4
+5,9780000000057,El reino escondido,Autor de ejemplo 5,5,5
+6,9780000000064,Crónicas del puerto,Autor de ejemplo 6,6,6
+7,9780000000071,Vida en movimiento,Autor de ejemplo 7,7,7
+8,9780000000088,Versos de otoño,Autor de ejemplo 8,8,8
+9,9780000000095,Python paso a paso,Autor de ejemplo 9,9,9
+10,9780000000101,Recetas cotidianas,Autor de ejemplo 10,10,10

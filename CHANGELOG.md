@@ -1,3 +1,11 @@
+## [Ejercicio 5]
+
+- Implementación de la precarga en preload_data.py.
+- Creación de ocho archivos CSV con diez registros por entidad.
+- Vinculación de libros, precios, stock y cotizaciones mediante IDs.
+- Comprobación de la carga de archivos y de las relaciones entre objetos.
+- Conservación de los CSV que ya contienen datos al repetir la precarga.
+
 ## [Ejercicio 4]
 
 - Implementación de servicios para las ocho entidades.
