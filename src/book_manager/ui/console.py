@@ -32,7 +32,7 @@ T = TypeVar("T", bound=EntidadBase)
 class Consola:
     """Presenta menús CRUD para las ocho entidades de la librería."""
 
-        def __init__(
+    def __init__(
         self,
         generos: ServicioGenero,
         editoriales: ServicioEditorial,
