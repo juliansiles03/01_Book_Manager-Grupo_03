@@ -1,3 +1,10 @@
+## [Ejercicio 3]
+
+- Sprint 2: incorporación de un context manager para transacciones.
+- Confirmación de cambios cuando la operación termina correctamente.
+- Reversión de cambios y cierre de la sesión cuando ocurre un error.
+- Comprobación de commit y rollback con una base de prueba temporal.
+
 ## [Ejercicio 2]
 
 - Sprint 2: creación de ConexionDB con SQLAlchemy.
