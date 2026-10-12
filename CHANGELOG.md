@@ -1,3 +1,10 @@
+## [Ejercicio 2]
+
+- Sprint 2: creación de ConexionDB con SQLAlchemy.
+- Configuración del motor para la base de datos SQLite.
+- Creación de sesiones y liberación de conexiones.
+- Comprobación de la conexión mediante una consulta de prueba.
+
 ## [Ejercicio 1]
 
 - Sprint 2: creación de la rama desde Sprint_1.
