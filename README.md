@@ -1,5 +1,22 @@
 # Book Manager - Grupo 03
 
+## Sprint 2
+
+### Objetivo
+
+Ampliar Book Manager para persistir sus datos en una base de datos
+relacional mediante SQLAlchemy y consultar cotizaciones externas.
+
+### Introducción y contexto
+
+El Sprint 1 permitió administrar libros, precios, stock y cotizaciones
+mediante una aplicación de consola con persistencia en archivos CSV.
+
+En este sprint se migrarán esos datos a tablas relacionadas. El sistema
+continuará ofreciendo operaciones CRUD y agregará la consulta de
+cotizaciones del dólar por API, la visualización de precios en dos
+monedas y la exportación de precios a CSV.
+
 ## Sprint 1
 
 ### Objetivo

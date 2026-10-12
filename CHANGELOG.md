@@ -1,3 +1,10 @@
+## [Ejercicio 1]
+
+- Sprint 2: creación de la rama desde Sprint_1.
+- Incorporación de la estructura para conexión, modelos y migraciones.
+- Incorporación de dependencias y configuración inicial de la API.
+- Actualización del objetivo y contexto en README.md.
+
 ## [Ejercicio 7]
 
 - Creación de main.py como punto de entrada del sistema.
