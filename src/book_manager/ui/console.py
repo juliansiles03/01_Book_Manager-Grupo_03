@@ -13,7 +13,6 @@ from book_manager.entities.entities import (
     Stock,
     TipoCotizacion,
 )
-from book_manager.repositories.repositories import AlmacenCSV
 from book_manager.services.services import (
     ServicioBase,
     ServicioCotizacionDolar,
@@ -33,19 +32,26 @@ T = TypeVar("T", bound=EntidadBase)
 class Consola:
     """Presenta menús CRUD para las ocho entidades de la librería."""
 
-    def __init__(self, almacen: AlmacenCSV) -> None:
-        self.generos: ServicioGenero = ServicioGenero(almacen)
-        self.editoriales: ServicioEditorial = ServicioEditorial(almacen)
-        self.monedas: ServicioMoneda = ServicioMoneda(almacen)
-        self.tipos: ServicioTipoCotizacion = (
-            ServicioTipoCotizacion(almacen)
-        )
-        self.libros: ServicioLibro = ServicioLibro(almacen)
-        self.precios: ServicioPrecio = ServicioPrecio(almacen)
-        self.stocks: ServicioStock = ServicioStock(almacen)
-        self.cotizaciones: ServicioCotizacionDolar = (
-            ServicioCotizacionDolar(almacen)
-        )
+        def __init__(
+        self,
+        generos: ServicioGenero,
+        editoriales: ServicioEditorial,
+        monedas: ServicioMoneda,
+        tipos: ServicioTipoCotizacion,
+        libros: ServicioLibro,
+        precios: ServicioPrecio,
+        stocks: ServicioStock,
+        cotizaciones: ServicioCotizacionDolar,
+    ) -> None:
+        self.generos: ServicioGenero = generos
+        self.editoriales: ServicioEditorial = editoriales
+        self.monedas: ServicioMoneda = monedas
+        self.tipos: ServicioTipoCotizacion = tipos
+        self.libros: ServicioLibro = libros
+        self.precios: ServicioPrecio = precios
+        self.stocks: ServicioStock = stocks
+        self.cotizaciones: ServicioCotizacionDolar = cotizaciones
+
 
     def ejecutar(self) -> None:
         """Abre el menú principal hasta que el usuario decida salir."""
