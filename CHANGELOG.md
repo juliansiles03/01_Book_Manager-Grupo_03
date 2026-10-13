@@ -1,5 +1,12 @@
 # Sprint 2
 
+## [Ejercicio 2]
+
+- Implementación de ConexionDB con SQLAlchemy.
+- Configuración de PostgreSQL de Supabase y del controlador psycopg.
+- Creación de sesiones y liberación de conexiones.
+- Prueba aislada con SQLite y consulta real a Supabase.
+
 ## [Ejercicio 1]
 
 - Configuración de la rama Sprint_2 a partir del Sprint_1.
@@ -52,13 +59,6 @@
 - Confirmación de cambios cuando la operación termina correctamente.
 - Reversión de cambios y cierre de la sesión cuando ocurre un error.
 - Comprobación de commit y rollback con una base de prueba temporal.
-
-## [Ejercicio 2]
-
-- Sprint 2: creación de ConexionDB con SQLAlchemy.
-- Configuración del motor para PostgreSQL de Supabase.
-- Creación de sesiones y liberación de conexiones.
-- Comprobación de sesiones y consulta real a Supabase.
 
 # Sprint 1
 
