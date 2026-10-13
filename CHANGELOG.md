@@ -1,5 +1,12 @@
 # Sprint 2
 
+## [Ejercicio 3]
+
+- Incorporación del context manager transaccion() a ConexionDB.
+- Confirmación de cambios al finalizar correctamente.
+- Reversión ante errores y cierre de sesiones.
+- Comprobación de commit y rollback en una base temporal.
+
 ## [Ejercicio 2]
 
 - Implementación de ConexionDB con SQLAlchemy.
@@ -52,13 +59,6 @@
 - Incorporación de restricciones para precios y cantidades.
 - Comprobación de las tablas y sus relaciones en una base temporal.
 - Creación y comprobación de las ocho tablas en Supabase.
-
-## [Ejercicio 3]
-
-- Sprint 2: incorporación de un context manager para transacciones.
-- Confirmación de cambios cuando la operación termina correctamente.
-- Reversión de cambios y cierre de la sesión cuando ocurre un error.
-- Comprobación de commit y rollback con una base de prueba temporal.
 
 # Sprint 1
 
