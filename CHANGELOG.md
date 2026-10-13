@@ -1,5 +1,12 @@
 # Sprint 2
 
+## [Ejercicio 4]
+
+- Definición de las ocho tablas con SQLAlchemy ORM.
+- Configuración de claves primarias, relaciones y restricciones.
+- Comprobación de tablas y relaciones en una base temporal.
+- Creación y comprobación de las ocho tablas en Supabase.
+
 ## [Ejercicio 3]
 
 - Incorporación del context manager transaccion() a ConexionDB.
@@ -50,15 +57,6 @@
 - Conversión a USD con la última cotización Oficial disponible.
 - Exportación CSV de libros para todas las monedas registradas.
 - Comprobación de las opciones de consola y del archivo exportado.
-
-## [Ejercicio 4]
-
-- Sprint 2: definición de ocho tablas mediante SQLAlchemy ORM.
-- Incorporación de claves primarias y relaciones entre tablas.
-- Conservación de las claves de stock y cotizaciones del Sprint 1.
-- Incorporación de restricciones para precios y cantidades.
-- Comprobación de las tablas y sus relaciones en una base temporal.
-- Creación y comprobación de las ocho tablas en Supabase.
 
 # Sprint 1
 
