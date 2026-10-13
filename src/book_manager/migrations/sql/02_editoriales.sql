@@ -1,0 +1,13 @@
+BEGIN;
+INSERT INTO editoriales (id, nombre) VALUES (1, 'Debolsillo') ON CONFLICT DO NOTHING;
+INSERT INTO editoriales (id, nombre) VALUES (2, 'Sudamericana') ON CONFLICT DO NOTHING;
+INSERT INTO editoriales (id, nombre) VALUES (3, 'Salamandra') ON CONFLICT DO NOTHING;
+INSERT INTO editoriales (id, nombre) VALUES (4, 'Minotauro') ON CONFLICT DO NOTHING;
+INSERT INTO editoriales (id, nombre) VALUES (5, 'Lumen') ON CONFLICT DO NOTHING;
+INSERT INTO editoriales (id, nombre) VALUES (6, 'Alfaguara') ON CONFLICT DO NOTHING;
+INSERT INTO editoriales (id, nombre) VALUES (7, 'Planeta') ON CONFLICT DO NOTHING;
+INSERT INTO editoriales (id, nombre) VALUES (8, 'Emecé') ON CONFLICT DO NOTHING;
+INSERT INTO editoriales (id, nombre) VALUES (9, 'Anagrama') ON CONFLICT DO NOTHING;
+INSERT INTO editoriales (id, nombre) VALUES (10, 'Seix Barral') ON CONFLICT DO NOTHING;
+SELECT setval(pg_get_serial_sequence('editoriales', 'id'), (SELECT MAX(id) FROM editoriales), true);
+COMMIT;

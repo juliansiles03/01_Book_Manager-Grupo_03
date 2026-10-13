@@ -1,0 +1,13 @@
+BEGIN;
+INSERT INTO monedas (id, nombre, codigo) VALUES (1, 'Peso argentino', 'ARS') ON CONFLICT DO NOTHING;
+INSERT INTO monedas (id, nombre, codigo) VALUES (2, 'Dólar estadounidense', 'USD') ON CONFLICT DO NOTHING;
+INSERT INTO monedas (id, nombre, codigo) VALUES (3, 'Euro', 'EUR') ON CONFLICT DO NOTHING;
+INSERT INTO monedas (id, nombre, codigo) VALUES (4, 'Real brasileño', 'BRL') ON CONFLICT DO NOTHING;
+INSERT INTO monedas (id, nombre, codigo) VALUES (5, 'Libra esterlina', 'GBP') ON CONFLICT DO NOTHING;
+INSERT INTO monedas (id, nombre, codigo) VALUES (6, 'Peso uruguayo', 'UYU') ON CONFLICT DO NOTHING;
+INSERT INTO monedas (id, nombre, codigo) VALUES (7, 'Peso chileno', 'CLP') ON CONFLICT DO NOTHING;
+INSERT INTO monedas (id, nombre, codigo) VALUES (8, 'Peso mexicano', 'MXN') ON CONFLICT DO NOTHING;
+INSERT INTO monedas (id, nombre, codigo) VALUES (9, 'Peso colombiano', 'COP') ON CONFLICT DO NOTHING;
+INSERT INTO monedas (id, nombre, codigo) VALUES (10, 'Dólar canadiense', 'CAD') ON CONFLICT DO NOTHING;
+SELECT setval(pg_get_serial_sequence('monedas', 'id'), (SELECT MAX(id) FROM monedas), true);
+COMMIT;

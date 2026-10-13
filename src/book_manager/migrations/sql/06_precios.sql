@@ -1,0 +1,13 @@
+BEGIN;
+INSERT INTO precios (id, libro_id, moneda_id, valor) VALUES (1, 1, 1, 18000.0) ON CONFLICT DO NOTHING;
+INSERT INTO precios (id, libro_id, moneda_id, valor) VALUES (2, 2, 1, 21000.0) ON CONFLICT DO NOTHING;
+INSERT INTO precios (id, libro_id, moneda_id, valor) VALUES (3, 3, 1, 24000.0) ON CONFLICT DO NOTHING;
+INSERT INTO precios (id, libro_id, moneda_id, valor) VALUES (4, 4, 1, 27000.0) ON CONFLICT DO NOTHING;
+INSERT INTO precios (id, libro_id, moneda_id, valor) VALUES (5, 5, 1, 30000.0) ON CONFLICT DO NOTHING;
+INSERT INTO precios (id, libro_id, moneda_id, valor) VALUES (6, 6, 1, 33000.0) ON CONFLICT DO NOTHING;
+INSERT INTO precios (id, libro_id, moneda_id, valor) VALUES (7, 7, 1, 36000.0) ON CONFLICT DO NOTHING;
+INSERT INTO precios (id, libro_id, moneda_id, valor) VALUES (8, 8, 1, 39000.0) ON CONFLICT DO NOTHING;
+INSERT INTO precios (id, libro_id, moneda_id, valor) VALUES (9, 9, 1, 42000.0) ON CONFLICT DO NOTHING;
+INSERT INTO precios (id, libro_id, moneda_id, valor) VALUES (10, 10, 1, 45000.0) ON CONFLICT DO NOTHING;
+SELECT setval(pg_get_serial_sequence('precios', 'id'), (SELECT MAX(id) FROM precios), true);
+COMMIT;

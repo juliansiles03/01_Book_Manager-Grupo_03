@@ -1,0 +1,12 @@
+BEGIN;
+INSERT INTO cotizaciones (tipo_id, fecha, compra, venta) VALUES (1, '2026-01-15', 920.0, 970.0) ON CONFLICT DO NOTHING;
+INSERT INTO cotizaciones (tipo_id, fecha, compra, venta) VALUES (2, '2026-01-15', 940.0, 990.0) ON CONFLICT DO NOTHING;
+INSERT INTO cotizaciones (tipo_id, fecha, compra, venta) VALUES (3, '2026-01-15', 960.0, 1010.0) ON CONFLICT DO NOTHING;
+INSERT INTO cotizaciones (tipo_id, fecha, compra, venta) VALUES (4, '2026-01-15', 980.0, 1030.0) ON CONFLICT DO NOTHING;
+INSERT INTO cotizaciones (tipo_id, fecha, compra, venta) VALUES (5, '2026-01-15', 1000.0, 1050.0) ON CONFLICT DO NOTHING;
+INSERT INTO cotizaciones (tipo_id, fecha, compra, venta) VALUES (6, '2026-01-15', 1020.0, 1070.0) ON CONFLICT DO NOTHING;
+INSERT INTO cotizaciones (tipo_id, fecha, compra, venta) VALUES (7, '2026-01-15', 1040.0, 1090.0) ON CONFLICT DO NOTHING;
+INSERT INTO cotizaciones (tipo_id, fecha, compra, venta) VALUES (8, '2026-01-15', 1060.0, 1110.0) ON CONFLICT DO NOTHING;
+INSERT INTO cotizaciones (tipo_id, fecha, compra, venta) VALUES (9, '2026-01-15', 1080.0, 1130.0) ON CONFLICT DO NOTHING;
+INSERT INTO cotizaciones (tipo_id, fecha, compra, venta) VALUES (10, '2026-01-15', 1100.0, 1150.0) ON CONFLICT DO NOTHING;
+COMMIT;

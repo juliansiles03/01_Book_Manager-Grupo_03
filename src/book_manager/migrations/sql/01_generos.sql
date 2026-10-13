@@ -1,0 +1,13 @@
+BEGIN;
+INSERT INTO generos (id, nombre) VALUES (1, 'Novela') ON CONFLICT DO NOTHING;
+INSERT INTO generos (id, nombre) VALUES (2, 'Ensayo') ON CONFLICT DO NOTHING;
+INSERT INTO generos (id, nombre) VALUES (3, 'Infantil') ON CONFLICT DO NOTHING;
+INSERT INTO generos (id, nombre) VALUES (4, 'Ciencia ficción') ON CONFLICT DO NOTHING;
+INSERT INTO generos (id, nombre) VALUES (5, 'Fantasía') ON CONFLICT DO NOTHING;
+INSERT INTO generos (id, nombre) VALUES (6, 'Historia') ON CONFLICT DO NOTHING;
+INSERT INTO generos (id, nombre) VALUES (7, 'Biografía') ON CONFLICT DO NOTHING;
+INSERT INTO generos (id, nombre) VALUES (8, 'Poesía') ON CONFLICT DO NOTHING;
+INSERT INTO generos (id, nombre) VALUES (9, 'Cuento') ON CONFLICT DO NOTHING;
+INSERT INTO generos (id, nombre) VALUES (10, 'Teatro') ON CONFLICT DO NOTHING;
+SELECT setval(pg_get_serial_sequence('generos', 'id'), (SELECT MAX(id) FROM generos), true);
+COMMIT;

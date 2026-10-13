@@ -1,0 +1,13 @@
+BEGIN;
+INSERT INTO libros (id, isbn, titulo, autor, editorial_id, genero_id) VALUES (1, '9789500755757', 'Ficciones', 'Jorge Luis Borges', 2, 9) ON CONFLICT DO NOTHING;
+INSERT INTO libros (id, isbn, titulo, autor, editorial_id, genero_id) VALUES (2, '9789877252538', 'Rayuela', 'Julio Cortázar', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO libros (id, isbn, titulo, autor, editorial_id, genero_id) VALUES (3, '9789877256963', 'Cien años de soledad', 'Gabriel García Márquez', 1, 1) ON CONFLICT DO NOTHING;
+INSERT INTO libros (id, isbn, titulo, autor, editorial_id, genero_id) VALUES (4, '9789500758802', 'El principito', 'Antoine de Saint-Exupéry', 2, 3) ON CONFLICT DO NOTHING;
+INSERT INTO libros (id, isbn, titulo, autor, editorial_id, genero_id) VALUES (5, '9789878002316', 'Harry Potter y la piedra filosofal', 'J. K. Rowling', 3, 5) ON CONFLICT DO NOTHING;
+INSERT INTO libros (id, isbn, titulo, autor, editorial_id, genero_id) VALUES (6, '9789505472697', 'El hobbit', 'J. R. R. Tolkien', 4, 5) ON CONFLICT DO NOTHING;
+INSERT INTO libros (id, isbn, titulo, autor, editorial_id, genero_id) VALUES (7, '9789505472611', 'El Silmarillion', 'J. R. R. Tolkien', 4, 5) ON CONFLICT DO NOTHING;
+INSERT INTO libros (id, isbn, titulo, autor, editorial_id, genero_id) VALUES (8, '9788426400260', '1984', 'George Orwell', 5, 4) ON CONFLICT DO NOTHING;
+INSERT INTO libros (id, isbn, titulo, autor, editorial_id, genero_id) VALUES (9, '9789877252941', 'Bestiario', 'Julio Cortázar', 1, 9) ON CONFLICT DO NOTHING;
+INSERT INTO libros (id, isbn, titulo, autor, editorial_id, genero_id) VALUES (10, '9789877382846', 'Final del juego', 'Julio Cortázar', 6, 9) ON CONFLICT DO NOTHING;
+SELECT setval(pg_get_serial_sequence('libros', 'id'), (SELECT MAX(id) FROM libros), true);
+COMMIT;
