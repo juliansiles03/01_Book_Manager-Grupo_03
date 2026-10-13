@@ -1,3 +1,10 @@
+## [Ejercicio 5]
+
+- Lectura de los ocho archivos CSV del Sprint 1.
+- Migración de sus registros a las tablas de Supabase.
+- Generación de ocho archivos SQL con sentencias de inserción.
+- Comprobación de los datos cargados y de los archivos generados.
+
 ## [Ejercicio 8]
 
 - Incorporación de la consulta de cotizaciones por API al menú.
