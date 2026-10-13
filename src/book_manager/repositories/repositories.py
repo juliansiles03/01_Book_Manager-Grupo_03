@@ -565,3 +565,6 @@ class AlmacenCSV:
                 for entidad in self.cotizaciones.leer_todos()
             ],
         )
+
+# Almacén persistente utilizado desde el Sprint 2.
+from book_manager.repositories.database_repositories import AlmacenDB

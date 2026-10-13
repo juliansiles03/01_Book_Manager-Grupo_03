@@ -15,7 +15,7 @@ from book_manager.entities.entities import (
     TipoCotizacion,
 )
 from book_manager.repositories.repositories import (
-    AlmacenCSV,
+    AlmacenDB,
     IRepositorio,
 )
 
@@ -45,14 +45,14 @@ def validar_importe(valor: float) -> None:
 
 
 class ServicioBase(abc.ABC, Generic[T]):
-    """Coordina el CRUD, las validaciones y el guardado en CSV."""
+    """Coordina el CRUD, las validaciones y la persistencia en la base de datos."""
 
     def __init__(
         self,
-        almacen: AlmacenCSV,
+        almacen: AlmacenDB,
         repositorio: IRepositorio[T],
     ) -> None:
-        self._almacen: AlmacenCSV = almacen
+        self._almacen: AlmacenDB = almacen
         self._repositorio: IRepositorio[T] = repositorio
 
     @abc.abstractmethod
@@ -144,7 +144,7 @@ class ServicioNombre(ServicioBase[N], Generic[N]):
 class ServicioGenero(ServicioNombre[Genero]):
     """Gestiona géneros y evita borrar los utilizados por libros."""
 
-    def __init__(self, almacen: AlmacenCSV) -> None:
+    def __init__(self, almacen: AlmacenDB) -> None:
         super().__init__(almacen, almacen.generos)
 
     def _en_uso(self, id: int) -> bool:
@@ -157,7 +157,7 @@ class ServicioGenero(ServicioNombre[Genero]):
 class ServicioEditorial(ServicioNombre[Editorial]):
     """Gestiona editoriales y sus referencias desde libros."""
 
-    def __init__(self, almacen: AlmacenCSV) -> None:
+    def __init__(self, almacen: AlmacenDB) -> None:
         super().__init__(almacen, almacen.editoriales)
 
     def _en_uso(self, id: int) -> bool:
@@ -170,7 +170,7 @@ class ServicioEditorial(ServicioNombre[Editorial]):
 class ServicioMoneda(ServicioNombre[Moneda]):
     """Gestiona monedas con códigos únicos de tres letras."""
 
-    def __init__(self, almacen: AlmacenCSV) -> None:
+    def __init__(self, almacen: AlmacenDB) -> None:
         super().__init__(almacen, almacen.monedas)
 
     def _validar(self, entidad: Moneda) -> None:
@@ -212,7 +212,7 @@ class ServicioMoneda(ServicioNombre[Moneda]):
 class ServicioTipoCotizacion(ServicioNombre[TipoCotizacion]):
     """Gestiona tipos de cotización y protege su histórico."""
 
-    def __init__(self, almacen: AlmacenCSV) -> None:
+    def __init__(self, almacen: AlmacenDB) -> None:
         super().__init__(almacen, almacen.tipos)
 
     def _en_uso(self, id: int) -> bool:
@@ -224,7 +224,7 @@ class ServicioTipoCotizacion(ServicioNombre[TipoCotizacion]):
 class ServicioLibro(ServicioBase[Libro]):
     """Valida los datos bibliográficos y las relaciones del libro."""
 
-    def __init__(self, almacen: AlmacenCSV) -> None:
+    def __init__(self, almacen: AlmacenDB) -> None:
         super().__init__(almacen, almacen.libros)
 
     def _validar(self, entidad: Libro) -> None:
@@ -284,7 +284,7 @@ class ServicioLibro(ServicioBase[Libro]):
 class ServicioPrecio(ServicioBase[Precio]):
     """Valida importes y las relaciones con libros y monedas."""
 
-    def __init__(self, almacen: AlmacenCSV) -> None:
+    def __init__(self, almacen: AlmacenDB) -> None:
         super().__init__(almacen, almacen.precios)
 
     def _validar(self, entidad: Precio) -> None:
@@ -334,8 +334,8 @@ class ServicioPrecio(ServicioBase[Precio]):
 class ServicioStock:
     """Gestiona cantidades enteras no negativas para libros existentes."""
 
-    def __init__(self, almacen: AlmacenCSV) -> None:
-        self._almacen: AlmacenCSV = almacen
+    def __init__(self, almacen: AlmacenDB) -> None:
+        self._almacen: AlmacenDB = almacen
 
     def _validar(self, stock: Stock) -> Stock:
         """Valida el stock y lo vincula con el libro registrado."""
@@ -392,8 +392,8 @@ class ServicioStock:
 class ServicioCotizacionDolar:
     """Gestiona las cotizaciones por tipo y fecha."""
 
-    def __init__(self, almacen: AlmacenCSV) -> None:
-        self._almacen: AlmacenCSV = almacen
+    def __init__(self, almacen: AlmacenDB) -> None:
+        self._almacen: AlmacenDB = almacen
 
     def _validar(
         self, cotizacion: CotizacionDolar
