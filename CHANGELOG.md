@@ -1,3 +1,11 @@
+## [Ejercicio 4]
+
+- Sprint 2: definición de ocho tablas mediante SQLAlchemy ORM.
+- Incorporación de claves primarias y relaciones entre tablas.
+- Conservación de las claves de stock y cotizaciones del Sprint 1.
+- Incorporación de restricciones para precios y cantidades.
+- Comprobación de las tablas y sus relaciones en una base temporal.
+
 ## [Ejercicio 3]
 
 - Sprint 2: incorporación de un context manager para transacciones.
