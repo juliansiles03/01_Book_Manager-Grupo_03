@@ -1,3 +1,11 @@
+## [Ejercicio 7]
+
+- Lectura de API_URL desde el archivo .env mediante dotenv.
+- Descarga y validación de las cotizaciones de DolarAPI.
+- Asociación de las casas de la API con los tipos registrados.
+- Alta y actualización de cotizaciones en Supabase.
+- Comprobación de persistencia mediante una respuesta simulada.
+
 ## [Ejercicio 6]
 
 - Implementación de los ocho repositorios CRUD con SQLAlchemy.
