@@ -1,3 +1,10 @@
+## [Ejercicio 6]
+
+- Implementación de los ocho repositorios CRUD con SQLAlchemy.
+- Integración de servicios y consola con PostgreSQL de Supabase.
+- Adaptación de main.py para iniciar con los datos migrados.
+- Comprobación de persistencia y operaciones desde la consola.
+
 ## [Ejercicio 5]
 
 - Lectura de los ocho archivos CSV del Sprint 1.
