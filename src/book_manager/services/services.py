@@ -1,5 +1,11 @@
 import abc
-from datetime import date
+import os
+from datetime import date, datetime
+from pathlib import Path
+from zoneinfo import ZoneInfo
+
+import requests
+from dotenv import load_dotenv
 from typing import Generic, List, Optional, TypeVar
 
 from book_manager.entities.entities import (
@@ -394,6 +400,102 @@ class ServicioCotizacionDolar:
 
     def __init__(self, almacen: AlmacenDB) -> None:
         self._almacen: AlmacenDB = almacen
+
+    def obtener_cotizaciones(self) -> list[CotizacionDolar]:
+        """Descarga cotizaciones del dólar y las registra en la base."""
+        ruta_env = Path(__file__).resolve().parents[3] / ".env"
+        load_dotenv(ruta_env)
+
+        url = os.getenv("API_URL")
+        if not url:
+            raise ValueError("Falta API_URL en el archivo .env.")
+
+        respuesta = requests.get(url, timeout=15)
+        respuesta.raise_for_status()
+        datos = respuesta.json()
+
+        if not isinstance(datos, list):
+            raise ValueError(
+                "La API debe devolver una lista de cotizaciones."
+            )
+
+        nombres_por_casa = {
+            "oficial": "Oficial",
+            "blue": "Blue",
+            "bolsa": "MEP",
+            "contadoconliqui": "CCL",
+            "mayorista": "Mayorista",
+            "tarjeta": "Tarjeta",
+            "cripto": "Cripto",
+        }
+
+        tipos = {
+            tipo.nombre.casefold(): tipo
+            for tipo in self._almacen.tipos.leer_todos()
+        }
+        siguiente_id = max(
+            (tipo.id for tipo in tipos.values()),
+            default=0,
+        ) + 1
+
+        registradas: list[CotizacionDolar] = []
+
+        for dato in datos:
+            if not isinstance(dato, dict):
+                raise ValueError(
+                    "La API devolvió una cotización inválida."
+                )
+
+            if dato.get("moneda") != "USD":
+                continue
+
+            casa = str(dato["casa"]).strip().casefold()
+            nombre = nombres_por_casa.get(
+                casa,
+                str(dato["nombre"]).strip(),
+            )
+
+            tipo = tipos.get(nombre.casefold())
+
+            if tipo is None:
+                tipo = self._almacen.tipos.crear(
+                    TipoCotizacion(siguiente_id, nombre)
+                )
+                tipos[nombre.casefold()] = tipo
+                siguiente_id += 1
+
+            marca_temporal = datetime.fromisoformat(
+                str(dato["fechaActualizacion"]).replace(
+                    "Z", "+00:00"
+                )
+            )
+
+            if marca_temporal.tzinfo is None:
+                fecha = marca_temporal.date()
+            else:
+                fecha = marca_temporal.astimezone(
+                    ZoneInfo("America/Argentina/Buenos_Aires")
+                ).date()
+
+            cotizacion = CotizacionDolar(
+                tipo=tipo,
+                fecha=fecha,
+                compra=float(dato["compra"]),
+                venta=float(dato["venta"]),
+            )
+
+            existente = self.leer_por_tipo_y_fecha(
+                tipo.id, fecha
+            )
+
+            if existente is None:
+                registrada = self.crear(cotizacion)
+            else:
+                registrada = self.actualizar(cotizacion)
+
+            registradas.append(registrada)
+
+        return registradas
 
     def _validar(
         self, cotizacion: CotizacionDolar
