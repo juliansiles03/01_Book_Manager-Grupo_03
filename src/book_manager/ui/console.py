@@ -1,4 +1,8 @@
+import csv
 from datetime import date
+from pathlib import Path
+
+import requests
 from typing import Callable, Iterable, TypeVar
 
 from book_manager.entities.entities import (
@@ -62,6 +66,9 @@ class Consola:
                 print("3. Editoriales    4. Monedas")
                 print("5. Tipos dólar    6. Precios")
                 print("7. Stock          8. Cotizaciones dólar")
+                print("9. Obtener cotizaciones por API")
+                print("10. Precios bimonetarios")
+                print("11. Exportar precios a CSV")
                 print("0. Salir")
 
                 opcion: str = input("Opción: ").strip()
@@ -118,6 +125,12 @@ class Consola:
                         self._modificar_cotizacion,
                         self._eliminar_cotizacion,
                     )
+                elif opcion == "9":
+                    self._obtener_cotizaciones_api()
+                elif opcion == "10":
+                    self._mostrar_precios_bimonetarios()
+                elif opcion == "11":
+                    self._exportar_precios_csv()
                 elif opcion == "0":
                     print("Sesión finalizada.")
                     return
@@ -126,6 +139,238 @@ class Consola:
 
         except EOFError:
             print("\nSesión finalizada.")
+
+    def _obtener_cotizaciones_api(self) -> None:
+        """Descarga cotizaciones y muestra las registradas."""
+        try:
+            registradas = self.cotizaciones.obtener_cotizaciones()
+        except (
+            requests.RequestException,
+            ValueError,
+            KeyError,
+            TypeError,
+        ) as error:
+            print(f"Error al consultar la API: {error}")
+            return
+
+        print(f"Cotizaciones registradas: {len(registradas)}.")
+        self._listar(registradas)
+
+    def _ultima_cotizacion_oficial(
+        self,
+    ) -> CotizacionDolar | None:
+        """Obtiene la última cotización Oficial registrada."""
+        tipo_oficial = next(
+            (
+                tipo
+                for tipo in self.tipos.leer_todos()
+                if tipo.nombre.casefold() == "oficial"
+            ),
+            None,
+        )
+
+        if tipo_oficial is None:
+            return None
+
+        historico = self.cotizaciones.leer_historico_por_tipo(
+            tipo_oficial.id
+        )
+        validas = [
+            cotizacion
+            for cotizacion in historico
+            if cotizacion.venta > 0
+        ]
+
+        return max(
+            validas,
+            key=lambda cotizacion: cotizacion.fecha,
+            default=None,
+        )
+
+    def _mostrar_precios_bimonetarios(self) -> None:
+        """Presenta ARS y la moneda seleccionada para cada libro."""
+        monedas = self.monedas.leer_todos()
+
+        for moneda in monedas:
+            print(
+                f"{moneda.id}. {moneda.nombre} "
+                f"({moneda.codigo})"
+            )
+
+        try:
+            moneda_id = int(
+                input("ID de la segunda moneda: ")
+            )
+        except ValueError:
+            print("El ID de moneda debe ser un número entero.")
+            return
+
+        seleccionada = self.monedas.leer_por_id(moneda_id)
+
+        if seleccionada is None:
+            print("No existe esa moneda.")
+            return
+
+        if seleccionada.codigo == "ARS":
+            print("Elegí una moneda distinta de ARS.")
+            return
+
+        moneda_ars = next(
+            (
+                moneda
+                for moneda in monedas
+                if moneda.codigo == "ARS"
+            ),
+            None,
+        )
+
+        if moneda_ars is None:
+            print("No está registrada la moneda ARS.")
+            return
+
+        precios = {
+            (precio.libro.id, precio.moneda.id): precio.valor
+            for precio in self.precios.leer_todos()
+        }
+        oficial = (
+            self._ultima_cotizacion_oficial()
+            if seleccionada.codigo == "USD"
+            else None
+        )
+
+        print(
+            f"=== PRECIOS EN ARS Y "
+            f"{seleccionada.codigo} ==="
+        )
+
+        for libro in self.libros.leer_todos():
+            importe_ars = precios.get(
+                (libro.id, moneda_ars.id)
+            )
+            importe_seleccionado = precios.get(
+                (libro.id, seleccionada.id)
+            )
+
+            if (
+                importe_seleccionado is None
+                and seleccionada.codigo == "USD"
+                and importe_ars is not None
+                and oficial is not None
+            ):
+                importe_seleccionado = (
+                    importe_ars / oficial.venta
+                )
+
+            texto_ars = (
+                f"{importe_ars:.2f} ARS"
+                if importe_ars is not None
+                else "Sin precio ARS"
+            )
+            texto_seleccionado = (
+                f"{importe_seleccionado:.2f} "
+                f"{seleccionada.codigo}"
+                if importe_seleccionado is not None
+                else f"Sin precio en {seleccionada.codigo}"
+            )
+
+            print(
+                f"{libro.titulo} | "
+                f"{texto_ars} | {texto_seleccionado}"
+            )
+
+        if oficial is not None:
+            print(
+                "Conversión a USD: dólar Oficial venta "
+                f"{oficial.venta:.2f} del "
+                f"{oficial.fecha.isoformat()}."
+            )
+
+    def _exportar_precios_csv(self) -> None:
+        """Exporta cada libro en todas las monedas registradas."""
+        libros = self.libros.leer_todos()
+        monedas = self.monedas.leer_todos()
+
+        if not libros or not monedas:
+            print("No hay libros o monedas para exportar.")
+            return
+
+        precios = {
+            (precio.libro.id, precio.moneda.id): precio.valor
+            for precio in self.precios.leer_todos()
+        }
+        moneda_ars = next(
+            (
+                moneda
+                for moneda in monedas
+                if moneda.codigo == "ARS"
+            ),
+            None,
+        )
+        oficial = self._ultima_cotizacion_oficial()
+
+        ruta_salida = Path("/content/precios_book_manager.csv")
+
+        with ruta_salida.open(
+            "w", encoding="utf-8", newline=""
+        ) as archivo:
+            escritor = csv.writer(archivo)
+            escritor.writerow(
+                [
+                    "libro_id",
+                    "isbn",
+                    "titulo",
+                    "moneda",
+                    "valor",
+                    "origen",
+                ]
+            )
+
+            for libro in libros:
+                for moneda in monedas:
+                    importe = precios.get(
+                        (libro.id, moneda.id)
+                    )
+                    origen = (
+                        "Precio registrado"
+                        if importe is not None
+                        else "Sin precio registrado"
+                    )
+
+                    if (
+                        importe is None
+                        and moneda.codigo == "USD"
+                        and moneda_ars is not None
+                        and oficial is not None
+                    ):
+                        importe_ars = precios.get(
+                            (libro.id, moneda_ars.id)
+                        )
+
+                        if importe_ars is not None:
+                            importe = (
+                                importe_ars / oficial.venta
+                            )
+                            origen = (
+                                "Convertido con dólar Oficial "
+                                f"del {oficial.fecha.isoformat()}"
+                            )
+
+                    escritor.writerow(
+                        [
+                            libro.id,
+                            libro.isbn,
+                            libro.titulo,
+                            moneda.codigo,
+                            (
+                                f"{importe:.2f}"
+                                if importe is not None
+                                else ""
+                            ),
+                            origen,
+                        ]
+                    )
+
+        print(f"Precios exportados a: {ruta_salida}")
 
     def _menu_crud(
         self,

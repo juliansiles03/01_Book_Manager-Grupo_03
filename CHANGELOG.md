@@ -1,3 +1,11 @@
+## [Ejercicio 8]
+
+- Incorporación de la consulta de cotizaciones por API al menú.
+- Visualización de precios en ARS y una segunda moneda seleccionada.
+- Conversión a USD con la última cotización Oficial disponible.
+- Exportación CSV de libros para todas las monedas registradas.
+- Comprobación de las opciones de consola y del archivo exportado.
+
 ## [Ejercicio 4]
 
 - Sprint 2: definición de ocho tablas mediante SQLAlchemy ORM.
