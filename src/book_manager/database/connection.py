@@ -1,15 +1,12 @@
 import os
 
-from contextlib import contextmanager
-from typing import Iterator
-
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
 
 class ConexionDB:
-    """Configura la conexión y administra sesiones de base de datos."""
+    """Configura la conexión y crea sesiones de base de datos."""
 
     def __init__(self, url: str | None = None) -> None:
         if url is None:
@@ -54,20 +51,6 @@ class ConexionDB:
     def crear_sesion(self) -> Session:
         """Crea una sesión que debe cerrarse después de usarla."""
         return self._fabrica_sesiones()
-
-    @contextmanager
-    def transaccion(self) -> Iterator[Session]:
-        """Confirma los cambios o los revierte si ocurre un error."""
-        sesion: Session = self.crear_sesion()
-
-        try:
-            yield sesion
-            sesion.commit()
-        except Exception:
-            sesion.rollback()
-            raise
-        finally:
-            sesion.close()
 
     def cerrar(self) -> None:
         """Libera las conexiones mantenidas por el motor."""
