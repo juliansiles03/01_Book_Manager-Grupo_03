@@ -5,6 +5,7 @@
 - Conservación de las claves de stock y cotizaciones del Sprint 1.
 - Incorporación de restricciones para precios y cantidades.
 - Comprobación de las tablas y sus relaciones en una base temporal.
+- Creación y comprobación de las ocho tablas en Supabase.
 
 ## [Ejercicio 3]
 
@@ -16,9 +17,9 @@
 ## [Ejercicio 2]
 
 - Sprint 2: creación de ConexionDB con SQLAlchemy.
-- Configuración del motor para la base de datos SQLite.
+- Configuración del motor para PostgreSQL de Supabase.
 - Creación de sesiones y liberación de conexiones.
-- Comprobación de la conexión mediante una consulta de prueba.
+- Comprobación de sesiones y consulta real a Supabase.
 
 ## [Ejercicio 1]
 
