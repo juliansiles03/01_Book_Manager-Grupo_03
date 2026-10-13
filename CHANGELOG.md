@@ -1,3 +1,12 @@
+# Sprint 2
+
+## [Ejercicio 1]
+
+- Configuración de la rama Sprint_2 a partir del Sprint_1.
+- Preparación de los directorios y archivos del nuevo sprint.
+- Registro de las dependencias y de API_URL en .env.
+- Actualización del objetivo y contexto en README.md.
+
 ## [Ejercicio 7]
 
 - Lectura de API_URL desde el archivo .env mediante dotenv.
@@ -51,12 +60,7 @@
 - Creación de sesiones y liberación de conexiones.
 - Comprobación de sesiones y consulta real a Supabase.
 
-## [Ejercicio 1]
-
-- Sprint 2: creación de la rama desde Sprint_1.
-- Incorporación de la estructura para conexión, modelos y migraciones.
-- Incorporación de dependencias y configuración inicial de la API.
-- Actualización del objetivo y contexto en README.md.
+# Sprint 1
 
 ## [Ejercicio 7]
 
@@ -111,4 +115,3 @@
 - Creación de la estructura de directorios y archivos del proyecto.
 - Incorporación del objetivo y contexto del sprint en README.md.
 - Creación de requirements.txt y del registro de cambios.
-
