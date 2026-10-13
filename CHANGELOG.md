@@ -1,5 +1,13 @@
 # Sprint 2
 
+## [Ejercicio 7]
+
+- Lectura de API_URL desde .env mediante dotenv.
+- Descarga y validación de cotizaciones desde DolarAPI.
+- Asociación de las casas de la API con los tipos registrados.
+- Alta y actualización de cotizaciones en Supabase.
+- Comprobación de persistencia y actualización con una API simulada.
+
 ## [Ejercicio 6]
 
 - Implementación de los ocho repositorios CRUD con SQLAlchemy.
@@ -41,14 +49,6 @@
 - Preparación de los directorios y archivos del nuevo sprint.
 - Registro de las dependencias y de API_URL en .env.
 - Actualización del objetivo y contexto en README.md.
-
-## [Ejercicio 7]
-
-- Lectura de API_URL desde el archivo .env mediante dotenv.
-- Descarga y validación de las cotizaciones de DolarAPI.
-- Asociación de las casas de la API con los tipos registrados.
-- Alta y actualización de cotizaciones en Supabase.
-- Comprobación de persistencia mediante una respuesta simulada.
 
 ## [Ejercicio 8]
 
