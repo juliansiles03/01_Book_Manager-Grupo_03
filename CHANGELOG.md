@@ -1,5 +1,14 @@
 # Sprint 2
 
+## [Ejercicio 8]
+
+- Incorporación de la consulta de cotizaciones por API al menú.
+- Visualización de precios en ARS y otra moneda seleccionada.
+- Conversión a USD con la última cotización Oficial disponible.
+- Carga de precios de demostración para las demás monedas.
+- Exportación de precios a CSV para las monedas registradas.
+- Comprobación de los menús y del archivo exportado.
+
 ## [Ejercicio 7]
 
 - Lectura de API_URL desde .env mediante dotenv.
@@ -49,14 +58,6 @@
 - Preparación de los directorios y archivos del nuevo sprint.
 - Registro de las dependencias y de API_URL en .env.
 - Actualización del objetivo y contexto en README.md.
-
-## [Ejercicio 8]
-
-- Incorporación de la consulta de cotizaciones por API al menú.
-- Visualización de precios en ARS y una segunda moneda seleccionada.
-- Conversión a USD con la última cotización Oficial disponible.
-- Exportación CSV de libros para todas las monedas registradas.
-- Comprobación de las opciones de consola y del archivo exportado.
 
 # Sprint 1
 
