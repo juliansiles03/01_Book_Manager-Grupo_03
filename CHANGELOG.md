@@ -1,5 +1,17 @@
 # Sprint 2
 
+## [Ejercicio 8]
+
+- Incorporación de la consulta de cotizaciones por API al menú.
+- Visualización de precios en ARS y otra moneda seleccionada.
+- Conversión a USD con la última cotización Oficial disponible.
+- Carga de precios de demostración para las demás monedas.
+- Exportación de precios a CSV para las monedas registradas.
+- Comprobación de los menús y del archivo exportado.
+- Registro de DATABASE_URL y API_URL en el archivo .env.
+- Carga automática del .env desde ConexionDB.
+- Verificación de Supabase sin una DATABASE_URL heredada.
+
 ## [Ejercicio 7]
 
 - Lectura de API_URL desde .env mediante dotenv.
@@ -49,15 +61,6 @@
 - Preparación de los directorios y archivos del nuevo sprint.
 - Registro de las dependencias y de API_URL en .env.
 - Actualización del objetivo y contexto en README.md.
-
-## [Ejercicio 8]
-
-- Incorporación de la consulta de cotizaciones por API al menú.
-- Visualización de precios en ARS y otra moneda seleccionada.
-- Conversión a USD con la última cotización Oficial disponible.
-- Carga de precios de demostración para las demás monedas.
-- Exportación de precios a CSV para las monedas registradas.
-- Comprobación de los menús y del archivo exportado.
 
 # Sprint 1
 
