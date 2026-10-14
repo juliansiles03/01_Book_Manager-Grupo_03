@@ -1,5 +1,13 @@
 # Sprint 2
 
+## [Ejercicio 7]
+
+- Lectura de API_URL desde .env mediante dotenv.
+- Descarga y validación de cotizaciones desde DolarAPI.
+- Asociación de las casas de la API con los tipos registrados.
+- Alta y actualización de cotizaciones en Supabase.
+- Comprobación de persistencia y actualización con una API simulada.
+
 ## [Ejercicio 6]
 
 - Implementación de los ocho repositorios CRUD con SQLAlchemy.
@@ -50,14 +58,6 @@
 - Carga de precios de demostración para las demás monedas.
 - Exportación de precios a CSV para las monedas registradas.
 - Comprobación de los menús y del archivo exportado.
-
-## [Ejercicio 7]
-
-- Lectura de API_URL desde .env mediante dotenv.
-- Descarga y validación de cotizaciones desde DolarAPI.
-- Asociación de las casas de la API con los tipos registrados.
-- Alta y actualización de cotizaciones en Supabase.
-- Comprobación de persistencia y actualización con una API simulada.
 
 # Sprint 1
 
