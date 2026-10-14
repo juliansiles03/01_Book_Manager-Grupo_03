@@ -1,5 +1,12 @@
 # Sprint 2
 
+## [Ejercicio 1]
+
+- Configuración de la rama Sprint_2 a partir del Sprint_1.
+- Preparación de los directorios y archivos del nuevo sprint.
+- Registro de las dependencias y de API_URL en .env.
+- Actualización del objetivo y contexto en README.md.
+
 ## [Ejercicio 8]
 
 - Incorporación de la consulta de cotizaciones por API al menú.
@@ -51,13 +58,6 @@
 - Configuración de PostgreSQL de Supabase y del controlador psycopg.
 - Creación de sesiones y liberación de conexiones.
 - Prueba aislada con SQLite y consulta real a Supabase.
-
-## [Ejercicio 1]
-
-- Configuración de la rama Sprint_2 a partir del Sprint_1.
-- Preparación de los directorios y archivos del nuevo sprint.
-- Registro de las dependencias y de API_URL en .env.
-- Actualización del objetivo y contexto en README.md.
 
 # Sprint 1
 
