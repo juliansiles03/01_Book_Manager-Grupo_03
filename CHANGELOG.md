@@ -1,5 +1,15 @@
 # Sprint 2
 
+## [Ejercicio 4]
+
+- Definición de las ocho tablas con SQLAlchemy ORM.
+- Configuración de claves primarias, relaciones y restricciones.
+- Comprobación de tablas y relaciones en una base temporal.
+- Creación y comprobación de las ocho tablas en Supabase.
+- Corrección: relaciones bidireccionales con back_populates entre los ocho modelos.
+- Corrección: navegación desde Libro hacia sus precios y su stock individual.
+- Conservación de las restricciones de borrado para registros con dependencias.
+
 ## [Ejercicio 8]
 
 - Incorporación de la consulta de cotizaciones por API al menú.
@@ -33,13 +43,6 @@
 - Migración de sus registros a las tablas de Supabase.
 - Generación de ocho archivos SQL con sentencias de inserción.
 - Comprobación de los datos cargados y de los archivos generados.
-
-## [Ejercicio 4]
-
-- Definición de las ocho tablas con SQLAlchemy ORM.
-- Configuración de claves primarias, relaciones y restricciones.
-- Comprobación de tablas y relaciones en una base temporal.
-- Creación y comprobación de las ocho tablas en Supabase.
 
 ## [Ejercicio 3]
 

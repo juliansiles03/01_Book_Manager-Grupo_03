@@ -1,5 +1,6 @@
 from datetime import date
 from decimal import Decimal
+from typing import Optional
 
 from sqlalchemy import (
     CheckConstraint,
@@ -30,6 +31,10 @@ class GeneroModelo(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     nombre: Mapped[str] = mapped_column(String(100), nullable=False)
 
+    libros: Mapped[list["LibroModelo"]] = relationship(
+        back_populates="genero", passive_deletes="all"
+    )
+
 
 class EditorialModelo(Base):
     """Editorial registrada en la base de datos."""
@@ -38,6 +43,10 @@ class EditorialModelo(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     nombre: Mapped[str] = mapped_column(String(150), nullable=False)
+
+    libros: Mapped[list["LibroModelo"]] = relationship(
+        back_populates="editorial", passive_deletes="all"
+    )
 
 
 class MonedaModelo(Base):
@@ -53,6 +62,10 @@ class MonedaModelo(Base):
         unique=True,
     )
 
+    precios: Mapped[list["PrecioModelo"]] = relationship(
+        back_populates="moneda", passive_deletes="all"
+    )
+
 
 class TipoCotizacionModelo(Base):
     """Tipo de cotización del dólar."""
@@ -61,6 +74,10 @@ class TipoCotizacionModelo(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     nombre: Mapped[str] = mapped_column(String(100), nullable=False)
+
+    cotizaciones: Mapped[list["CotizacionDolarModelo"]] = relationship(
+        back_populates="tipo", passive_deletes="all"
+    )
 
 
 class LibroModelo(Base):
@@ -86,8 +103,19 @@ class LibroModelo(Base):
         nullable=False,
     )
 
-    editorial: Mapped[EditorialModelo] = relationship()
-    genero: Mapped[GeneroModelo] = relationship()
+    editorial: Mapped[EditorialModelo] = relationship(
+        back_populates="libros"
+    )
+    genero: Mapped[GeneroModelo] = relationship(
+        back_populates="libros"
+    )
+    precios: Mapped[list["PrecioModelo"]] = relationship(
+        back_populates="libro", passive_deletes="all"
+    )
+    stock: Mapped[Optional["StockModelo"]] = relationship(
+        back_populates="libro", uselist=False,
+        passive_deletes="all",
+    )
 
 
 class PrecioModelo(Base):
@@ -120,8 +148,12 @@ class PrecioModelo(Base):
         nullable=False,
     )
 
-    libro: Mapped[LibroModelo] = relationship()
-    moneda: Mapped[MonedaModelo] = relationship()
+    libro: Mapped[LibroModelo] = relationship(
+        back_populates="precios"
+    )
+    moneda: Mapped[MonedaModelo] = relationship(
+        back_populates="precios"
+    )
 
 
 class StockModelo(Base):
@@ -144,7 +176,9 @@ class StockModelo(Base):
         nullable=False,
     )
 
-    libro: Mapped[LibroModelo] = relationship()
+    libro: Mapped[LibroModelo] = relationship(
+        back_populates="stock"
+    )
 
 
 class CotizacionDolarModelo(Base):
@@ -179,4 +213,6 @@ class CotizacionDolarModelo(Base):
         nullable=False,
     )
 
-    tipo: Mapped[TipoCotizacionModelo] = relationship()
+    tipo: Mapped[TipoCotizacionModelo] = relationship(
+        back_populates="cotizaciones"
+    )
