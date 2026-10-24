@@ -26,6 +26,9 @@ from book_manager.repositories.repositories import (
 )
 
 
+from book_manager.services.audit import auditar
+
+
 T = TypeVar("T", bound=EntidadBase)
 N = TypeVar("N", bound=EntidadConNombre)
 
@@ -75,6 +78,7 @@ class ServicioBase(abc.ABC, Generic[T]):
         """Indica si otras entidades utilizan este registro."""
         return False
 
+    @auditar
     def crear(self, entidad: T) -> T:
         """Valida, crea y guarda una entidad."""
         validar_id(entidad.id)
@@ -83,15 +87,18 @@ class ServicioBase(abc.ABC, Generic[T]):
         self._almacen.guardar()
         return resultado
 
+    @auditar
     def leer_por_id(self, id: int) -> Optional[T]:
         """Busca una entidad por un ID válido."""
         validar_id(id)
         return self._repositorio.leer_por_id(id)
 
+    @auditar
     def leer_todos(self) -> List[T]:
         """Devuelve todas las entidades del repositorio."""
         return self._repositorio.leer_todos()
 
+    @auditar
     def actualizar(self, entidad: T) -> T:
         """Valida los cambios y modifica una entidad existente."""
         validar_id(entidad.id)
@@ -110,6 +117,7 @@ class ServicioBase(abc.ABC, Generic[T]):
         self._almacen.guardar()
         return existente
 
+    @auditar
     def eliminar(self, id: int) -> bool:
         """Elimina una entidad si ninguna otra la utiliza."""
         validar_id(id)
@@ -361,6 +369,7 @@ class ServicioStock:
 
         return Stock(libro, stock.cantidad)
 
+    @auditar
     def crear(self, stock: Stock) -> Stock:
         """Valida y crea el stock de un libro."""
         resultado = self._almacen.stocks.crear(
@@ -369,15 +378,18 @@ class ServicioStock:
         self._almacen.guardar()
         return resultado
 
+    @auditar
     def leer_por_libro(self, libro_id: int) -> Optional[Stock]:
         """Devuelve el stock del libro solicitado."""
         validar_id(libro_id)
         return self._almacen.stocks.leer_por_libro(libro_id)
 
+    @auditar
     def leer_todos(self) -> List[Stock]:
         """Lista los stocks registrados."""
         return self._almacen.stocks.leer_todos()
 
+    @auditar
     def actualizar(self, stock: Stock) -> Stock:
         """Valida y modifica un stock existente."""
         resultado = self._almacen.stocks.actualizar(
@@ -386,6 +398,7 @@ class ServicioStock:
         self._almacen.guardar()
         return resultado
 
+    @auditar
     def eliminar(self, libro_id: int) -> bool:
         """Elimina el registro de stock del libro solicitado."""
         validar_id(libro_id)
@@ -401,6 +414,7 @@ class ServicioCotizacionDolar:
     def __init__(self, almacen: AlmacenDB) -> None:
         self._almacen: AlmacenDB = almacen
 
+    @auditar
     def obtener_cotizaciones(self) -> list[CotizacionDolar]:
         """Descarga cotizaciones del dólar y las registra en la base."""
         ruta_env = Path(__file__).resolve().parents[3] / ".env"
@@ -529,6 +543,7 @@ class ServicioCotizacionDolar:
             cotizacion.venta,
         )
 
+    @auditar
     def crear(
         self, cotizacion: CotizacionDolar
     ) -> CotizacionDolar:
@@ -539,6 +554,7 @@ class ServicioCotizacionDolar:
         self._almacen.guardar()
         return resultado
 
+    @auditar
     def leer_por_tipo_y_fecha(
         self, tipo_id: int, fecha: date
     ) -> Optional[CotizacionDolar]:
@@ -551,10 +567,12 @@ class ServicioCotizacionDolar:
             tipo_id, fecha
         )
 
+    @auditar
     def leer_todos(self) -> List[CotizacionDolar]:
         """Lista todas las cotizaciones."""
         return self._almacen.cotizaciones.leer_todos()
 
+    @auditar
     def leer_historico_por_tipo(
         self, tipo_id: int
     ) -> List[CotizacionDolar]:
@@ -564,6 +582,7 @@ class ServicioCotizacionDolar:
             tipo_id
         )
 
+    @auditar
     def actualizar(
         self, cotizacion: CotizacionDolar
     ) -> CotizacionDolar:
@@ -574,6 +593,7 @@ class ServicioCotizacionDolar:
         self._almacen.guardar()
         return resultado
 
+    @auditar
     def eliminar(self, tipo_id: int, fecha: date) -> bool:
         """Elimina una cotización por tipo y fecha."""
         validar_id(tipo_id)

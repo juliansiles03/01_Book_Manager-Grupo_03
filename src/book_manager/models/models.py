@@ -1,10 +1,12 @@
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional
 
 from sqlalchemy import (
     CheckConstraint,
     Date,
+    DateTime,
+    Text,
     ForeignKey,
     Integer,
     Numeric,
@@ -215,4 +217,28 @@ class CotizacionDolarModelo(Base):
 
     tipo: Mapped[TipoCotizacionModelo] = relationship(
         back_populates="cotizaciones"
+    )
+
+
+class AuditoriaModelo(Base):
+    """Registra las operaciones realizadas en el sistema."""
+
+    __tablename__ = "auditoria"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+    )
+    accion: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+    )
+    fecha: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+    )
+    detalles: Mapped[str] = mapped_column(
+        Text,
+        nullable=False,
     )

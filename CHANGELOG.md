@@ -1,5 +1,13 @@
 # Sprint 3
 
+## [Ejercicio 6]
+
+- Creación de la tabla auditoria con acción, fecha y detalles en Supabase.
+- Implementación del repositorio CRUD de registros de auditoría.
+- Creación de un decorador para registrar operaciones correctas y errores.
+- Aplicación del decorador a las operaciones públicas de los servicios.
+- Comprobación en una base temporal y persistencia de una operación en Supabase.
+
 ## [Ejercicio 5]
 
 - Generación de un reporte Excel con Libro, Precio interno, Precio web, Diferencia y Fecha de extracción.
