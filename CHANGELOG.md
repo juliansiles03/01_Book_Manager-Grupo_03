@@ -1,5 +1,14 @@
 # Sprint 3
 
+## [Ejercicio 3]
+
+- Implementación de CuspideSpider con búsquedas limitadas a títulos del catálogo.
+- Revisión de los primeros diez resultados de cada título y confirmación mediante ISBN.
+- Extracción de precio, imagen, medios de pago y descripción mediante un Item Loader.
+- Validación y deduplicación con pipelines de Scrapy.
+- Ejecución desde el proyecto y almacenamiento de los resultados para los reportes.
+- Comprobación local y extracción real de productos del catálogo.
+
 ## [Ejercicio 2]
 
 - Implementación de una función para cargar datos desde los archivos SQL generados en el TP2.
