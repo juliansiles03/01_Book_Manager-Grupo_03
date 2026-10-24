@@ -1,5 +1,12 @@
 # Sprint 3
 
+## [Ejercicio 4]
+
+- Comparación del precio web con el precio interno en pesos argentinos.
+- Solicitud del umbral porcentual antes de cada ejecución del scraper.
+- Generación de un CSV descargable de alertas en cada ejecución.
+- Comprobación de alertas con un umbral del 10 %.
+
 ## [Ejercicio 3]
 
 - Implementación de CuspideSpider con búsquedas limitadas a títulos del catálogo.
