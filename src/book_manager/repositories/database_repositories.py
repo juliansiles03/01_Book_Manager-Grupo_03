@@ -1,10 +1,13 @@
 """Repositorios SQLAlchemy compatibles con los servicios del Sprint 1."""
 
+from contextlib import contextmanager
 from datetime import date
 from decimal import Decimal
-from typing import Generic, TypeVar
+from typing import Generic, Iterator, TypeVar
 
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 
 from book_manager.database.connection import ConexionDB
 from book_manager.entities.entities import (
@@ -27,6 +30,13 @@ from book_manager.models.models import (
     PrecioModelo,
     StockModelo,
     TipoCotizacionModelo,
+)
+
+
+from book_manager.repositories.interfaces import (
+    IRepositorio,
+    IRepositorioStock,
+    IRepositorioCotizacionDolar,
 )
 
 
@@ -132,7 +142,60 @@ def _entidad(modelo: object) -> object:
     raise TypeError("Modelo SQL desconocido.")
 
 
-class RepositorioDB(Generic[T]):
+class _RepositorioDBBase:
+    """Traduce errores de integridad después del rollback."""
+
+    _conexion: ConexionDB
+
+    @contextmanager
+    def _transaccion(self) -> Iterator[Session]:
+        """Presenta errores de integridad que la consola puede capturar."""
+        try:
+            with self._conexion.transaccion() as sesion:
+                yield sesion
+        except IntegrityError as error:
+            codigo = getattr(error.orig, "sqlstate", None)
+            nombre_sqlite = getattr(error.orig, "sqlite_errorname", "")
+
+            if codigo == "23505" or nombre_sqlite in {
+                "SQLITE_CONSTRAINT_UNIQUE",
+                "SQLITE_CONSTRAINT_PRIMARYKEY",
+            }:
+                mensaje = (
+                    "Ya existe un registro con esos datos únicos "
+                    "(ID, ISBN, código o combinación de libro y moneda)."
+                )
+            elif (
+                codigo == "23503"
+                or nombre_sqlite == "SQLITE_CONSTRAINT_FOREIGNKEY"
+            ):
+                mensaje = (
+                    "La operación afecta una relación: falta un registro "
+                    "referenciado o se intenta borrar uno que está en uso."
+                )
+            elif (
+                codigo == "23502"
+                or nombre_sqlite == "SQLITE_CONSTRAINT_NOTNULL"
+            ):
+                mensaje = (
+                    "Falta un dato obligatorio para guardar el registro."
+                )
+            elif (
+                codigo == "23514"
+                or nombre_sqlite == "SQLITE_CONSTRAINT_CHECK"
+            ):
+                mensaje = (
+                    "Un valor incumple las restricciones de la base de datos."
+                )
+            else:
+                mensaje = (
+                    "La operación incumple una restricción de integridad."
+                )
+
+            raise ValueError(mensaje) from error
+
+
+class RepositorioDB(_RepositorioDBBase, IRepositorio[T], Generic[T]):
     """CRUD persistente de entidades con un ID simple."""
 
     def __init__(self, conexion: ConexionDB, modelo: type) -> None:
@@ -140,7 +203,7 @@ class RepositorioDB(Generic[T]):
         self._modelo = modelo
 
     def crear(self, entidad: T) -> T:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             if sesion.get(self._modelo, entidad.id) is not None:
                 raise ValueError(
                     f"Ya existe una entidad con el ID {entidad.id}."
@@ -149,7 +212,7 @@ class RepositorioDB(Generic[T]):
         return entidad
 
     def leer_por_id(self, id: int) -> T | None:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registro = sesion.get(self._modelo, id)
             return (
                 _entidad(registro)
@@ -158,7 +221,7 @@ class RepositorioDB(Generic[T]):
             )
 
     def leer_todos(self) -> list[T]:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registros = sesion.scalars(
                 select(self._modelo).order_by(self._modelo.id)
             ).all()
@@ -168,7 +231,7 @@ class RepositorioDB(Generic[T]):
             ]
 
     def actualizar(self, entidad: T) -> T:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registro = sesion.get(self._modelo, entidad.id)
 
             if registro is None:
@@ -183,7 +246,7 @@ class RepositorioDB(Generic[T]):
         return entidad
 
     def eliminar(self, id: int) -> bool:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registro = sesion.get(self._modelo, id)
 
             if registro is None:
@@ -194,21 +257,21 @@ class RepositorioDB(Generic[T]):
         return True
 
 
-class RepositorioStockDB:
+class RepositorioStockDB(_RepositorioDBBase, IRepositorioStock):
     """CRUD persistente de stock por libro."""
 
     def __init__(self, conexion: ConexionDB) -> None:
         self._conexion = conexion
 
     def crear(self, stock: Stock) -> Stock:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             if sesion.get(StockModelo, stock.libro_id) is not None:
                 raise ValueError("El libro ya posee un stock.")
             sesion.add(StockModelo(**_valores(stock)))
         return stock
 
     def leer_por_libro(self, libro_id: int) -> Stock | None:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registro = sesion.get(StockModelo, libro_id)
             return (
                 _entidad(registro)
@@ -217,7 +280,7 @@ class RepositorioStockDB:
             )
 
     def leer_todos(self) -> list[Stock]:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registros = sesion.scalars(
                 select(StockModelo).order_by(StockModelo.libro_id)
             ).all()
@@ -227,7 +290,7 @@ class RepositorioStockDB:
             ]
 
     def actualizar(self, stock: Stock) -> Stock:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registro = sesion.get(StockModelo, stock.libro_id)
 
             if registro is None:
@@ -238,7 +301,7 @@ class RepositorioStockDB:
         return stock
 
     def eliminar(self, libro_id: int) -> bool:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registro = sesion.get(StockModelo, libro_id)
 
             if registro is None:
@@ -249,7 +312,9 @@ class RepositorioStockDB:
         return True
 
 
-class RepositorioCotizacionDB:
+class RepositorioCotizacionDB(
+    _RepositorioDBBase, IRepositorioCotizacionDolar
+):
     """CRUD persistente de cotizaciones por tipo y fecha."""
 
     def __init__(self, conexion: ConexionDB) -> None:
@@ -261,7 +326,7 @@ class RepositorioCotizacionDB:
     ) -> CotizacionDolar:
         clave = (cotizacion.tipo_id, cotizacion.fecha)
 
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             if sesion.get(CotizacionDolarModelo, clave) is not None:
                 raise ValueError(
                     "Ya existe cotización para ese tipo y fecha."
@@ -277,7 +342,7 @@ class RepositorioCotizacionDB:
         tipo_id: int,
         fecha: date,
     ) -> CotizacionDolar | None:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registro = sesion.get(
                 CotizacionDolarModelo,
                 (tipo_id, fecha),
@@ -289,7 +354,7 @@ class RepositorioCotizacionDB:
             )
 
     def leer_todos(self) -> list[CotizacionDolar]:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registros = sesion.scalars(
                 select(CotizacionDolarModelo).order_by(
                     CotizacionDolarModelo.tipo_id,
@@ -305,7 +370,7 @@ class RepositorioCotizacionDB:
         self,
         tipo_id: int,
     ) -> list[CotizacionDolar]:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registros = sesion.scalars(
                 select(CotizacionDolarModelo)
                 .where(
@@ -322,7 +387,7 @@ class RepositorioCotizacionDB:
         self,
         cotizacion: CotizacionDolar,
     ) -> CotizacionDolar:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registro = sesion.get(
                 CotizacionDolarModelo,
                 (cotizacion.tipo_id, cotizacion.fecha),
@@ -345,7 +410,7 @@ class RepositorioCotizacionDB:
         tipo_id: int,
         fecha: date,
     ) -> bool:
-        with self._conexion.transaccion() as sesion:
+        with self._transaccion() as sesion:
             registro = sesion.get(
                 CotizacionDolarModelo,
                 (tipo_id, fecha),

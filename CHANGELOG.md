@@ -1,5 +1,16 @@
 # Sprint 2
 
+## [Ejercicio 6]
+
+- Implementación de los ocho repositorios CRUD con SQLAlchemy.
+- Integración de servicios y consola con PostgreSQL de Supabase.
+- Adaptación de main.py para iniciar con los datos migrados.
+- Comprobación del CRUD, la persistencia y el menú principal.
+- Corrección: extracción de las interfaces a un módulo compartido sin importaciones circulares.
+- Corrección: los repositorios de base implementan IRepositorio, IRepositorioStock e IRepositorioCotizacionDolar.
+- Corrección: traducción de IntegrityError a ValueError después de revertir la transacción.
+- Verificación de duplicados, borrados con dependencias y continuidad de las operaciones después de un error.
+
 ## [Ejercicio 4]
 
 - Definición de las ocho tablas con SQLAlchemy ORM.
@@ -29,13 +40,6 @@
 - Asociación de las casas de la API con los tipos registrados.
 - Alta y actualización de cotizaciones en Supabase.
 - Comprobación de persistencia y actualización con una API simulada.
-
-## [Ejercicio 6]
-
-- Implementación de los ocho repositorios CRUD con SQLAlchemy.
-- Integración de servicios y consola con PostgreSQL de Supabase.
-- Adaptación de main.py para iniciar con los datos migrados.
-- Comprobación del CRUD, la persistencia y el menú principal.
 
 ## [Ejercicio 5]
 
