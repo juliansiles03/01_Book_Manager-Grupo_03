@@ -1,5 +1,11 @@
 # Sprint 3
 
+## [Ejercicio 2]
+
+- Implementación de una función para cargar datos desde los archivos SQL generados en el TP2.
+- Ejecución de los ocho archivos en el orden de dependencias de las tablas.
+- Carga mediante una transacción y comprobación de los registros en Supabase.
+
 ## [Ejercicio 1]
 
 - Creación de Sprint_3 a partir de Sprint_2 corregido.
@@ -8,7 +14,6 @@
 - Actualización del objetivo y contexto en README.md.
 
 # Sprint 2
-
 ## [Ejercicio 6]
 
 - Implementación de los ocho repositorios CRUD con SQLAlchemy.
