@@ -1,5 +1,12 @@
 # Sprint 2
 
+## [Ejercicio 5]
+
+- Lectura de los ocho archivos CSV del Sprint 1.
+- Migración de sus registros a las tablas de Supabase.
+- Generación de ocho archivos SQL con sentencias de inserción.
+- Comprobación de los datos cargados y de los archivos generados.
+
 ## [Ejercicio 4]
 
 - Definición de las ocho tablas con SQLAlchemy ORM.
@@ -54,13 +61,6 @@
 - Integración de servicios y consola con PostgreSQL de Supabase.
 - Adaptación de main.py para iniciar con los datos migrados.
 - Comprobación del CRUD, la persistencia y el menú principal.
-
-## [Ejercicio 5]
-
-- Lectura de los ocho archivos CSV del Sprint 1.
-- Migración de sus registros a las tablas de Supabase.
-- Generación de ocho archivos SQL con sentencias de inserción.
-- Comprobación de los datos cargados y de los archivos generados.
 
 # Sprint 1
 
