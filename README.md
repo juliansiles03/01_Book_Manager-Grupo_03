@@ -1,5 +1,22 @@
 # Book Manager - Grupo 03
 
+## Sprint 3
+
+### Objetivo
+
+Obtener información de precios de Cúspide para comparar los libros del
+catálogo de Book Manager con los precios publicados en la web.
+
+### Introducción y contexto
+
+Los sprints anteriores permitieron administrar el catálogo mediante una
+consola, persistirlo en una base de datos y consultar cotizaciones externas.
+
+En este sprint se incorporará un scraper con Scrapy para consultar los libros
+del catálogo, comparar precios internos y externos, generar alertas en CSV y
+un reporte en Excel. También se registrarán las operaciones del sistema en
+un historial de auditoría consultable desde la consola.
+
 ## Sprint 2
 
 ### Objetivo

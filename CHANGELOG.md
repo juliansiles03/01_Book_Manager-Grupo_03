@@ -1,3 +1,12 @@
+# Sprint 3
+
+## [Ejercicio 1]
+
+- Creación de Sprint_3 a partir de Sprint_2 corregido.
+- Preparación de las carpetas del scraper y los reportes.
+- Registro de Scrapy y OpenPyXL en requirements.txt.
+- Actualización del objetivo y contexto en README.md.
+
 # Sprint 2
 
 ## [Ejercicio 6]
