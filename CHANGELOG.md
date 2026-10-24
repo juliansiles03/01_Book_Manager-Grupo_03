@@ -1,5 +1,12 @@
 # Sprint 2
 
+## [Ejercicio 4]
+
+- Definición de las ocho tablas con SQLAlchemy ORM.
+- Configuración de claves primarias, relaciones y restricciones.
+- Comprobación de tablas y relaciones en una base temporal.
+- Creación y comprobación de las ocho tablas en Supabase.
+
 ## [Ejercicio 3]
 
 - Incorporación del context manager transaccion() a ConexionDB.
@@ -54,13 +61,6 @@
 - Migración de sus registros a las tablas de Supabase.
 - Generación de ocho archivos SQL con sentencias de inserción.
 - Comprobación de los datos cargados y de los archivos generados.
-
-## [Ejercicio 4]
-
-- Definición de las ocho tablas con SQLAlchemy ORM.
-- Configuración de claves primarias, relaciones y restricciones.
-- Comprobación de tablas y relaciones en una base temporal.
-- Creación y comprobación de las ocho tablas en Supabase.
 
 # Sprint 1
 
