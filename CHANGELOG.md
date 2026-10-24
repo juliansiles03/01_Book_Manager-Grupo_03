@@ -1,5 +1,12 @@
 # Sprint 3
 
+## [Ejercicio 5]
+
+- Generación de un reporte Excel con Libro, Precio interno, Precio web, Diferencia y Fecha de extracción.
+- Comparación de los precios web con los precios internos en ARS.
+- Almacenamiento de la diferencia como valor numérico visible en lectores de Excel.
+- Comprobación de las cinco columnas, los importes y las fechas de extracción.
+
 ## [Ejercicio 4]
 
 - Comparación del precio web con el precio interno en pesos argentinos.
