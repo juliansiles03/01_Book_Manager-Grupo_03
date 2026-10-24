@@ -1,5 +1,12 @@
 # Sprint 3
 
+## [Ejercicio 7]
+
+- Incorporación de Ejecutar scraping, Generar reporte y Ver historial de auditoría al menú principal.
+- Integración del scraper y del reporte Excel mediante servicios auditados.
+- Uso de los SQL generados en el TP2 cuando main solicita la carga inicial.
+- Comprobación de las tres opciones desde el punto de entrada del programa.
+
 ## [Ejercicio 6]
 
 - Creación de la tabla auditoria con acción, fecha y detalles en Supabase.

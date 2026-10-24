@@ -1,4 +1,6 @@
 import csv
+import subprocess
+from decimal import Decimal, InvalidOperation
 from datetime import date
 from pathlib import Path
 
@@ -30,6 +32,12 @@ from book_manager.services.services import (
 )
 
 
+from book_manager.services.web_operations import (
+    ServicioAuditoria,
+    ServicioOperacionesWeb,
+)
+
+
 T = TypeVar("T", bound=EntidadBase)
 
 
@@ -46,6 +54,8 @@ class Consola:
         precios: ServicioPrecio,
         stocks: ServicioStock,
         cotizaciones: ServicioCotizacionDolar,
+        operaciones_web: ServicioOperacionesWeb | None = None,
+        auditoria: ServicioAuditoria | None = None,
     ) -> None:
         self.generos: ServicioGenero = generos
         self.editoriales: ServicioEditorial = editoriales
@@ -55,6 +65,8 @@ class Consola:
         self.precios: ServicioPrecio = precios
         self.stocks: ServicioStock = stocks
         self.cotizaciones: ServicioCotizacionDolar = cotizaciones
+        self.operaciones_web = operaciones_web
+        self.auditoria = auditoria
 
 
     def ejecutar(self) -> None:
@@ -69,6 +81,9 @@ class Consola:
                 print("9. Obtener cotizaciones por API")
                 print("10. Precios bimonetarios")
                 print("11. Exportar precios a CSV")
+                print("12. Ejecutar scraping")
+                print("13. Generar reporte")
+                print("14. Ver historial de auditoría")
                 print("0. Salir")
 
                 opcion: str = input("Opción: ").strip()
@@ -131,6 +146,12 @@ class Consola:
                     self._mostrar_precios_bimonetarios()
                 elif opcion == "11":
                     self._exportar_precios_csv()
+                elif opcion == "12":
+                    self._ejecutar_scraping()
+                elif opcion == "13":
+                    self._generar_reporte_excel()
+                elif opcion == "14":
+                    self._mostrar_auditoria()
                 elif opcion == "0":
                     print("Sesión finalizada.")
                     return
@@ -371,6 +392,96 @@ class Consola:
                     )
 
         print(f"Precios exportados a: {ruta_salida}")
+
+    def _ejecutar_scraping(self) -> None:
+        """Pide el umbral, ejecuta Scrapy y muestra sus archivos."""
+        if self.operaciones_web is None:
+            print("El servicio de scraping no está configurado.")
+            return
+
+        entrada = input(
+            "Diferencia mínima para alertas (%): "
+        ).strip()
+
+        try:
+            umbral = Decimal(
+                entrada.replace(",", ".")
+            )
+        except InvalidOperation:
+            print("Ingresá un porcentaje numérico.")
+            return
+
+        try:
+            extraccion, alertas, cantidad = (
+                self.operaciones_web.ejecutar_scraping(
+                    umbral
+                )
+            )
+        except (
+            ValueError,
+            RuntimeError,
+            subprocess.TimeoutExpired,
+        ) as error:
+            print(f"Error en scraping: {error}")
+            return
+
+        print(f"Libros encontrados: {cantidad}.")
+        print(f"Extracción: {extraccion}")
+        print(f"Alertas descargables: {alertas}")
+
+    def _generar_reporte_excel(self) -> None:
+        """Genera y muestra la ruta del reporte solicitado."""
+        if self.operaciones_web is None:
+            print("El servicio de reporte no está configurado.")
+            return
+
+        try:
+            ruta, cantidad = (
+                self.operaciones_web.generar_reporte()
+            )
+        except (
+            ValueError,
+            RuntimeError,
+            FileNotFoundError,
+        ) as error:
+            print(f"Error en reporte: {error}")
+            return
+
+        print(
+            f"Reporte generado para {cantidad} libros."
+        )
+        print(f"Excel descargable: {ruta}")
+
+    def _mostrar_auditoria(self) -> None:
+        """Muestra el historial de auditoría registrado."""
+        if self.auditoria is None:
+            print("El servicio de auditoría no está configurado.")
+            return
+
+        try:
+            registros = self.auditoria.leer_todos()
+        except ValueError as error:
+            print(f"Error en auditoría: {error}")
+            return
+
+        print("\n=== HISTORIAL DE AUDITORÍA ===")
+
+        if not registros:
+            print("No hay operaciones registradas.")
+            return
+
+        for registro in registros:
+            fecha = registro["fecha"]
+            texto_fecha = (
+                fecha.strftime("%d/%m/%Y %H:%M:%S")
+                if hasattr(fecha, "strftime")
+                else str(fecha)
+            )
+            print(
+                f'{registro["id"]} | {texto_fecha} | '
+                f'{registro["accion"]} | '
+                f'{registro["detalles"]}'
+            )
 
     def _menu_crud(
         self,

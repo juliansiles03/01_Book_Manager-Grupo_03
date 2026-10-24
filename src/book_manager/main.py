@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from book_manager.migrations.migrations import migrar_datos
+from book_manager.migrations.sql_loader import cargar_datos_desde_sql
 from book_manager.repositories.repositories import AlmacenDB
 from book_manager.services.services import (
     ServicioCotizacionDolar,
@@ -12,6 +12,10 @@ from book_manager.services.services import (
     ServicioStock,
     ServicioTipoCotizacion,
 )
+from book_manager.services.web_operations import (
+    ServicioAuditoria,
+    ServicioOperacionesWeb,
+)
 from book_manager.ui.console import Consola
 
 
@@ -22,9 +26,8 @@ def main(import_default_data: bool = True) -> None:
     )
 
     if import_default_data:
-        migrar_datos(
-            str(carpeta_migraciones / "csv"),
-            str(carpeta_migraciones / "sql"),
+        cargar_datos_desde_sql(
+            carpeta_migraciones / "sql"
         )
 
     almacen: AlmacenDB = AlmacenDB()
@@ -39,6 +42,8 @@ def main(import_default_data: bool = True) -> None:
             precios=ServicioPrecio(almacen),
             stocks=ServicioStock(almacen),
             cotizaciones=ServicioCotizacionDolar(almacen),
+            operaciones_web=ServicioOperacionesWeb(almacen),
+            auditoria=ServicioAuditoria(almacen),
         )
         consola.ejecutar()
     finally:
